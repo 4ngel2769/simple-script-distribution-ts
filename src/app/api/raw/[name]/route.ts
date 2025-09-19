@@ -1,17 +1,11 @@
-import fs from 'fs-extra';
 import { NextRequest, NextResponse } from "next/server";
-import { getScriptByName } from "@/lib/db";
-
-interface Params {
-  params: {
-    name: string;
-  };
-}
+import { getScriptByName, getScriptContent } from "@/lib/db";
 
 // GET /api/raw/[name] - Serve raw script content
-export async function GET(request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, context: { params: Promise<{ name: string }> }) {
+  const { name } = await context.params;
   try {
-    const script = await getScriptByName(params.name);
+    const script = await getScriptByName(name);
     
     if (!script) {
       return NextResponse.json(
@@ -25,12 +19,10 @@ export async function GET(request: NextRequest, { params }: Params) {
       return NextResponse.redirect(script.redirectUrl || '');
     }
     
-    // For local scripts
-    if (script.type === 'local' && script.scriptPath) {
+    // For local scripts (both managed and unmanaged)
+    if (script.type === 'local') {
       try {
-        const content = await fs.readFile(script.scriptPath, 'utf8');
-        
-        // Return as plain text
+        const content = await getScriptContent(script.name);
         return new NextResponse(content, {
           headers: {
             'Content-Type': 'text/plain; charset=utf-8',

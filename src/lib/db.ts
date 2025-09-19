@@ -134,15 +134,36 @@ export async function deleteScript(name: string): Promise<void> {
 // Get script content
 export async function getScriptContent(name: string): Promise<string> {
   const script = await getScriptByName(name);
-  if (!script) {
-    throw new Error(`Script "${name}" not found`);
+  if (!script) throw new Error(`Script "${name}" not found`);
+
+  if (script.type !== 'local') throw new Error(`Script "${name}" is not a local script`);
+
+  // Managed: use scriptPath as before
+  if (script.mode !== 'unmanaged' && script.scriptPath) {
+    return fs.readFile(script.scriptPath, 'utf8');
   }
-  
-  if (script.type !== 'local' || !script.scriptPath) {
-    throw new Error(`Script "${name}" is not a local script or has no content`);
+
+  // Unmanaged: find newest .sh file in folderPath
+  if (script.mode === 'unmanaged' && script.folderPath) {
+    const folder = path.isAbsolute(script.folderPath)
+      ? script.folderPath
+      : path.join(SCRIPTS_DIR, script.folderPath);
+
+    const files = (await fs.readdir(folder))
+      .filter(f => f.endsWith('.sh'))
+      .map(f => ({
+        file: f,
+        mtime: fs.statSync(path.join(folder, f)).mtime.getTime(),
+      }))
+      .sort((a, b) => b.mtime - a.mtime);
+
+    if (files.length === 0) throw new Error('No .sh files found in folder');
+
+    const newestFile = path.join(folder, files[0].file);
+    return fs.readFile(newestFile, 'utf8');
   }
-  
-  return fs.readFile(script.scriptPath, 'utf8');
+
+  throw new Error('Script content not found');
 }
 
 // Update script content

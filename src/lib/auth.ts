@@ -11,7 +11,6 @@ export async function verifyCredentials(username: string, password: string): Pro
   return bcrypt.compare(password, config.admin.passwordHash);
 }
 
-// JS alternative to hash_password.go
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
 }

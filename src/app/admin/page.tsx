@@ -57,6 +57,10 @@ export default function AdminPage() {
   };
 
   const handleEditContent = (script: ScriptConfig) => {
+    if (script.mode === 'unmanaged') {
+      toast.error('Cannot edit content of unmanaged scripts. Content is managed through the file system.');
+      return;
+    }
     setCurrentScript(script);
     setIsContentModalOpen(true);
   };
@@ -128,19 +132,25 @@ export default function AdminPage() {
                 {script.icon} {script.name}
               </h3>
               <p className="text-gray-300 mb-4">{script.description}</p>
-              <p className="text-sm text-gray-400 mb-3">
-                <strong>Type:</strong> {script.type}
+              <div className="text-sm text-gray-400 mb-3 space-y-1">
+                <p><strong>Type:</strong> {script.type}</p>
+                {script.type === 'local' && (
+                  <p><strong>Mode:</strong> {script.mode || 'managed'}</p>
+                )}
+                {script.type === 'local' && script.mode === 'unmanaged' && script.folderPath && (
+                  <p><strong>Folder:</strong> {script.folderPath}</p>
+                )}
                 {script.type === 'redirect' && (
                   <a 
                     href={script.redirectUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="ml-2 text-blue-400 hover:underline"
+                    className="text-blue-400 hover:underline block"
                   >
                     {script.redirectUrl}
                   </a>
                 )}
-              </p>
+              </div>
               
               <div className="flex flex-wrap gap-2">
                 <button
@@ -152,7 +162,13 @@ export default function AdminPage() {
                 {script.type === 'local' && (
                   <button
                     onClick={() => handleEditContent(script)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded"
+                    disabled={script.mode === 'unmanaged'}
+                    className={`px-3 py-1 rounded text-white ${
+                      script.mode === 'unmanaged'
+                        ? 'bg-gray-600 cursor-not-allowed opacity-50'
+                        : 'bg-purple-600 hover:bg-purple-700'
+                    }`}
+                    title={script.mode === 'unmanaged' ? 'Unmanaged scripts cannot be edited via web UI' : 'Edit script content'}
                   >
                     Edit Content
                   </button>

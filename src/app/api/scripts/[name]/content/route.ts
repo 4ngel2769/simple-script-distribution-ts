@@ -1,17 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { getScriptContent, updateScriptContent } from "@/lib/db";
-
-interface Params {
-  params: {
-    name: string;
-  };
-}
+import { getScriptContent, updateScriptContent, getScriptByName } from "@/lib/db";
 
 // GET /api/scripts/[name]/content - Get script content
-export async function GET(request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, context: { params: Promise<{ name: string }> }) {
+  const { name } = await context.params;
   try {
-    const content = await getScriptContent(params.name);
+    const content = await getScriptContent(name);
     return NextResponse.json({ content });
   } catch (error: unknown) {
     const message =
@@ -25,8 +20,9 @@ export async function GET(request: NextRequest, { params }: Params) {
   }
 }
 
-// PUT /api/scripts/[name]/content - Update script content
-export async function PUT(request: NextRequest, { params }: Params) {
+// PUT /api/scripts/[name]/content - Update script content (only for managed scripts)
+export async function PUT(request: NextRequest, context: { params: Promise<{ name: string }> }) {
+  const { name } = await context.params;
   // Check authentication
   const session = await getServerSession();
   if (!session) {
@@ -34,6 +30,22 @@ export async function PUT(request: NextRequest, { params }: Params) {
   }
   
   try {
+    const script = await getScriptByName(name);
+    if (!script) {
+      return NextResponse.json(
+        { error: "Script not found" },
+        { status: 404 }
+      );
+    }
+
+    // Only allow content editing for managed scripts
+    if (script.mode === 'unmanaged') {
+      return NextResponse.json(
+        { error: "Cannot edit content of unmanaged scripts" },
+        { status: 400 }
+      );
+    }
+
     const { content } = await request.json();
     
     if (!content) {
@@ -44,7 +56,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
     }
 
     // Update the script content
-    await updateScriptContent(params.name, content);
+    await updateScriptContent(name, content);
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
     const message =

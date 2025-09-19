@@ -5,14 +5,16 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "${HOST_PORT:-3000}:3000"
     volumes:
       - ./data:/app/data
       - ./scripts:/app/scripts
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - NEXTAUTH_URL=http://localhost:3000
-      - NEXTAUTH_SECRET=your-nextauth-secret-key-change-this
-      - CONFIG_PATH=/app/data/config.json
-      - SCRIPTS_DIR=/app/scripts
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-your-nextauth-secret-key-change-this}
+      - CONFIG_PATH=${CONFIG_PATH:-/app/data/config.json}
+      - SCRIPTS_DIR=${SCRIPTS_DIR:-/app/scripts}

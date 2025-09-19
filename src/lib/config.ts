@@ -8,6 +8,8 @@ export interface ScriptConfig {
   description: string;
   icon: string;
   type: 'local' | 'redirect';
+  mode?: 'managed' | 'unmanaged';
+  folderPath?: string;
   redirectUrl?: string;
   scriptPath?: string;
   createdAt: string;
