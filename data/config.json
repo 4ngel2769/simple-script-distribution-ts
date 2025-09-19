@@ -6,12 +6,12 @@
   "scripts": [
     {
       "name": "pi",
-      "description": "Rpi",
-      "icon": "🐳",
+      "description": "Auto-install script for OLED stats display for Raspberry Pis",
+      "icon": "⌨️",
       "type": "redirect",
       "redirectUrl": "https://raw.githubusercontent.com/4ngel2769/rpi_oled_stats/main/autoinstall_oled_stats.sh",
       "createdAt": "2025-09-19T13:30:19.641Z",
-      "updatedAt": "2025-09-19T14:11:14.932Z"
+      "updatedAt": "2025-09-19T16:18:15.872Z"
     },
     {
       "name": "jeb",
@@ -32,16 +32,6 @@
       "folderPath": "tor",
       "createdAt": "2025-09-19T14:00:00.000Z",
       "updatedAt": "2025-09-19T14:00:00.000Z"
-    },
-    {
-      "name": "index",
-      "description": "index",
-      "icon": "📜",
-      "type": "local",
-      "mode": "managed",
-      "createdAt": "2025-09-19T14:20:20.334Z",
-      "updatedAt": "2025-09-19T14:20:20.334Z",
-      "scriptPath": "scripts\\index\\index.sh"
     }
   ]
 }
