@@ -221,7 +221,7 @@ main() {
         print_info "Repository already exists, pulling latest changes..."
         git pull origin main
     else
-        git clone https://github.com/yourusername/simple-script-distribution-ts.git .
+        git clone https://github.com/4ngel2769/simple-script-distribution-ts.git .
     fi
     
     # Generate secrets
