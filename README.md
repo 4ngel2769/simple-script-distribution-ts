@@ -1,4 +1,4 @@
-# Script Distribution Server
+# Simple Script Disibution Server
 
 A modern, TypeScript-based application for distributing and managing shell scripts with an intuitive admin dashboard and support for both managed and automated script deployment.
 
@@ -224,27 +224,27 @@ awk '$7 ~ /^\/[^\/]+$/ && $7 !~ /^\/(api|admin|login)/ {print $7}' access.log | 
 
 ```
 simple-script-distribution-ts/
-├── 🗂️ src/
-│   ├── 📱 app/                  # Next.js App Router
-│   │   ├── 🏠 page.tsx          # Homepage with script list
-│   │   ├── 👤 admin/            # Admin dashboard
-│   │   ├── 🔐 login/            # Authentication
-│   │   ├── 📡 api/              # API endpoints
-│   │   └── 📜 [script]/         # Dynamic script routes
-│   ├── 🧩 components/           # React components
-│   ├── 📚 lib/                  # Utilities and business logic
-│   └── 🔧 providers/            # Context providers
-├── 📋 data/                     # Configuration storage
-│   └── config.json             # Main configuration file
-├── 📜 scripts/                  # Script file storage
+├── src/
+│   ├── app/                  # Next.js App Router
+│   │   ├── page.tsx          # Homepage with script list
+│   │   ├── admin/            # Admin dashboard
+│   │   ├── login/            # Authentication
+│   │   ├── api/              # API endpoints
+│   │   └── [script]/         # Dynamic script routes
+│   ├── components/           # React components
+│   ├── lib/                  # Utilities and business logic
+│   └── providers/            # Context providers
+├── data/                     # Configuration storage
+│   └── config.json           # Main configuration file
+├── scripts/                  # Script file storage
 │   ├── managed-script-1/       # Managed script folders
 │   └── unmanaged-app/          # Unmanaged script folders
-├── 🐳 docker-compose.yml       # Docker configuration
-├── 📖 docs/                     # Documentation
+├── docker-compose.yml       # Docker configuration
+├── docs/                     # Documentation
 │   ├── API.md                  # API documentation
 │   ├── DEPLOYMENT.md           # Deployment guide
 │   └── SETUP.md                # Setup instructions
-└── 🔧 tools/                    # Utility scripts
+└── tools/                    # Utility scripts
     └── hash-password.js        # Password hash generator
 ```
 
