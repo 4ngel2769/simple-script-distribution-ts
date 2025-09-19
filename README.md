@@ -1,12 +1,50 @@
-# Simple Script Disibution Server
+<div align="center">
+    <h1>
+        Simple Script Distribution Server  
+    </h1>
+    <br>
+    <a href="https://github.com/4ngel2769/simple-script-distribution-ts">
+        <img src="https://img.shields.io/github/license/4ngel2769/simple-script-distribution-ts" alt="MIT License">
+        <img src="https://img.shields.io/github/package-json/v/4ngel2769/simple-script-distribution-ts?logo=nodedotjs&labelColor=white&color=green" alt="Version">
+    </a>
+</div>
 
-A modern, TypeScript-based application for distributing and managing shell scripts with an intuitive admin dashboard and support for both managed and automated script deployment.
+<div align="center">
+  <b>
+    A modern, TypeScript-based server for distributing and managing shell scripts.<br>
+    Features an intuitive admin dashboard, managed/unmanaged script support, and seamless CI/CD integration.
+  </b>
+</div>
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Usage Examples](#usage-examples)
+  - [For End Users](#for-end-users)
+  - [For Administrators](#for-administrators)
+- [CI/CD Integration](#cicd-integration)
+- [Production Deployment](#production-deployment)
+- [Monitoring](#monitoring)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [Documentation](#documentation)
+- [Technology Stack](#technology-stack)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+---
 
 ## Overview
 
 The Script Distribution Server simplifies script distribution for system administrators, DevOps teams, and developers. It provides clean URLs for script access, an admin interface for management, and seamless CI/CD integration.
 
 **Key Use Case:** Enable users to install software or run configurations with simple one-liners:
+
 ```bash
 curl -fsSL https://your-server.com/docker-install | bash
 curl -fsSL https://your-server.com/setup-dev-env | bash
@@ -15,6 +53,7 @@ curl -fsSL https://your-server.com/setup-dev-env | bash
 ## Features
 
 ### Simple Script Distribution
+
 - Clean URLs: Access scripts at `https://your-domain.com/script`
 - One-line execution: `curl -fsSL https://your-domain.com/script | bash`
 - No complex paths: Direct root-level access to all scripts
@@ -22,11 +61,13 @@ curl -fsSL https://your-server.com/setup-dev-env | bash
 ### Script Types
 
 1. **Redirect Scripts**
+
    - Point to external URLs (GitHub, CDNs, etc.)
    - Perfect for maintaining existing script locations
    - Automatic redirection with proper HTTP codes
 
 2. **Managed Local Scripts**
+
    - Create and edit content through web interface
    - Built-in code editor with syntax highlighting
    - Version control through admin dashboard
@@ -37,18 +78,21 @@ curl -fsSL https://your-server.com/setup-dev-env | bash
    - Perfect for CI/CD integration and automated deployments
 
 ### Security & Management
+
 - Password-protected admin panel with secure authentication
 - Reserved name protection (prevents conflicts with system routes)
 - Automatic script name sanitization (spaces → hyphens, invalid chars removed)
 - File permission management for secure script execution
 
 ### Deployment Ready
+
 - Docker & Docker Compose support for easy deployment
 - Environment-based configuration for different environments
 - Health check endpoints for monitoring
 - Reverse proxy ready (Nginx, Caddy, Traefik examples included)
 
 ### Developer Experience
+
 - Built with TypeScript for type safety and maintainability
 - Next.js 15 with modern React features
 - Hot reload for development
@@ -100,12 +144,14 @@ curl -fsSL https://scripts.company.com/deploy | bash -s -- --env=prod --version=
 ### For Administrators
 
 1. **Create Redirect Script:**
+
    - Name: `docker-install`
    - Type: `Redirect`
    - URL: `https://get.docker.com`
    - Result: `curl -fsSL https://your-domain.com/docker-install | bash`
 
 2. **Create Managed Script:**
+
    - Name: `setup-dev-env`
    - Type: `Local` + `Managed`
    - Edit content through web interface
@@ -133,7 +179,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Generate deployment script
         run: |
           mkdir -p deployment-scripts
@@ -142,7 +188,7 @@ jobs:
           echo "Deploying ${GITHUB_SHA}"
           # Your deployment commands here
           EOF
-          
+
       - name: Deploy to script server
         run: |
           rsync -av deployment-scripts/ \
@@ -237,27 +283,27 @@ simple-script-distribution-ts/
 ├── data/                     # Configuration storage
 │   └── config.json           # Main configuration file
 ├── scripts/                  # Script file storage
-│   ├── managed-script-1/       # Managed script folders
-│   └── unmanaged-app/          # Unmanaged script folders
-├── docker-compose.yml       # Docker configuration
+│   ├── managed-script-1/     # Managed script folders
+│   └── unmanaged-app/        # Unmanaged script folders
+├── docker-compose.yml        # Docker configuration
 ├── docs/                     # Documentation
-│   ├── API.md                  # API documentation
-│   ├── DEPLOYMENT.md           # Deployment guide
-│   └── SETUP.md                # Setup instructions
+│   ├── API.md                # API documentation
+│   ├── DEPLOYMENT.md         # Deployment guide
+│   └── SETUP.md              # Setup instructions
 └── tools/                    # Utility scripts
-    └── hash-password.js        # Password hash generator
+    └── hash-password.js      # Password hash generator
 ```
 
 ## Contributing
 
 We welcome contributions! Please see our contributing guidelines:
 
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Make your changes** with appropriate tests
-4. **Commit your changes**: `git commit -m 'Add amazing feature'`
-5. **Push to the branch**: `git push origin feature/amazing-feature`
-6. **Open a Pull Request**
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes with appropriate tests
+4. Commit your changes: `git commit -m 'Add amazing feature'`
+5. Push to the branch: `git push origin feature/amazing-feature`
+6. Open a Pull Request
 
 ### Development Setup
 
@@ -271,9 +317,9 @@ npm run dev
 
 ## Documentation
 
-- **[Setup Guide](docs/SETUP.md)** - Installation and configuration
-- **[Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment
-- **[API Documentation](docs/API.md)** - REST API reference
+- [Setup Guide](docs/SETUP.md) - Installation and configuration
+- [Deployment Guide](docs/DEPLOYMENT.md) - Production deployment
+- [API Documentation](docs/API.md) - REST API reference
 
 ## Technology Stack
 
@@ -291,22 +337,26 @@ npm run dev
 
 ### Common Issues
 
-**Q: Scripts return 404 errors**
+**Scripts return 404 errors**
+
 - Check if script name conflicts with reserved names (`admin`, `login`, `api`)
 - Verify script exists in admin panel
 - Ensure file permissions are correct (`755` for script directories)
 
-**Q: Authentication fails**
+**Authentication fails**
+
 - Verify `NEXTAUTH_URL` matches your domain exactly
 - Ensure `NEXTAUTH_SECRET` is set and secure
 - Check admin password hash in `data/config.json`
 
-**Q: Unmanaged scripts don't update**
+**Unmanaged scripts don't update**
+
 - Verify `.sh` files exist in the specified folder
 - Check file modification times (newest file is served)
 - Ensure proper file permissions
 
-**Q: Docker container won't start**
+**Docker container won't start**
+
 - Check port conflicts (default: 3000)
 - Verify volume mounts for `data` and `scripts` directories
 - Review environment variables in `.env`
