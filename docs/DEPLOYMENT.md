@@ -8,7 +8,7 @@ This guide covers deploying the Script Distribution Server to production environ
 
 1. **Clone the repository on your server:**
    ```bash
-   git clone https://github.com/yourusername/simple-script-distribution-ts.git
+   git clone https://github.com/4ngel2769/simple-script-distribution-ts.git
    cd simple-script-distribution-ts
    ```
 

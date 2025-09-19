@@ -2,7 +2,7 @@
 
 A modern, TypeScript-based application for distributing and managing shell scripts with an intuitive admin dashboard and support for both managed and automated script deployment.
 
-## 🚀 Overview
+## Overview
 
 The Script Distribution Server simplifies script distribution for system administrators, DevOps teams, and developers. It provides clean URLs for script access, an admin interface for management, and seamless CI/CD integration.
 
@@ -12,55 +12,55 @@ curl -fsSL https://your-server.com/docker-install | bash
 curl -fsSL https://your-server.com/setup-dev-env | bash
 ```
 
-## ✨ Features
+## Features
 
-### 🌐 **Simple Script Distribution**
-- **Clean URLs**: Access scripts at `https://your-domain.com/script-name`
-- **One-line execution**: `curl -fsSL https://your-domain.com/script | bash`
-- **No complex paths**: Direct root-level access to all scripts
+### Simple Script Distribution
+- Clean URLs: Access scripts at `https://your-domain.com/script`
+- One-line execution: `curl -fsSL https://your-domain.com/script | bash`
+- No complex paths: Direct root-level access to all scripts
 
-### 🎯 **Three Script Types**
+### Script Types
 
-1. **🔗 Redirect Scripts**
+1. **Redirect Scripts**
    - Point to external URLs (GitHub, CDNs, etc.)
    - Perfect for maintaining existing script locations
    - Automatic redirection with proper HTTP codes
 
-2. **📝 Managed Local Scripts**
+2. **Managed Local Scripts**
    - Create and edit content through web interface
    - Built-in code editor with syntax highlighting
    - Version control through admin dashboard
 
-3. **🔄 Unmanaged Local Scripts**
+3. **Unmanaged Local Scripts**
    - Content automatically sourced from file system
    - Always serves the newest `.sh` file in specified folder
    - Perfect for CI/CD integration and automated deployments
 
-### 🛡️ **Security & Management**
-- **Password-protected admin panel** with secure authentication
-- **Reserved name protection** (prevents conflicts with system routes)
-- **Automatic script name sanitization** (spaces → hyphens, invalid chars removed)
-- **File permission management** for secure script execution
+### Security & Management
+- Password-protected admin panel with secure authentication
+- Reserved name protection (prevents conflicts with system routes)
+- Automatic script name sanitization (spaces → hyphens, invalid chars removed)
+- File permission management for secure script execution
 
-### 🐳 **Deployment Ready**
-- **Docker & Docker Compose support** for easy deployment
-- **Environment-based configuration** for different environments
-- **Health check endpoints** for monitoring
-- **Reverse proxy ready** (Nginx, Caddy, Traefik examples included)
+### Deployment Ready
+- Docker & Docker Compose support for easy deployment
+- Environment-based configuration for different environments
+- Health check endpoints for monitoring
+- Reverse proxy ready (Nginx, Caddy, Traefik examples included)
 
-### 💻 **Developer Experience**
-- **Built with TypeScript** for type safety and maintainability
-- **Next.js 15** with modern React features
-- **Hot reload** for development
-- **API documentation** for integration
+### Developer Experience
+- Built with TypeScript for type safety and maintainability
+- Next.js 15 with modern React features
+- Hot reload for development
+- API documentation for integration
 
-## 🚦 Quick Start
+## Quick Start
 
 ### Using Docker (Recommended)
 
 ```bash
 # Clone and start
-git clone https://github.com/yourusername/simple-script-distribution-ts.git
+git clone https://github.com/4ngel2769/simple-script-distribution-ts.git
 cd simple-script-distribution-ts
 docker compose up -d
 
@@ -68,19 +68,19 @@ docker compose up -d
 open http://localhost:3000
 ```
 
-**Default login:** `admin` / `admin123`
+Default login: `admin` / `admin123`
 
 ### Local Development
 
 ```bash
 # Install and run
-git clone https://github.com/yourusername/simple-script-distribution-ts.git
+git clone https://github.com/4ngel2769/simple-script-distribution-ts.git
 cd simple-script-distribution-ts
 npm install
 npm run dev
 ```
 
-## 📋 Usage Examples
+## Usage Examples
 
 ### For End Users
 
@@ -90,7 +90,7 @@ curl -fsSL https://scripts.company.com/setup-docker | bash
 
 # Download and inspect first
 curl https://scripts.company.com/setup-docker > setup-docker.sh
-cat setup-docker.sh  # Review the script
+cat setup-docker.sh
 chmod +x setup-docker.sh && ./setup-docker.sh
 
 # Pass arguments (if script supports them)
@@ -118,7 +118,7 @@ curl -fsSL https://scripts.company.com/deploy | bash -s -- --env=prod --version=
    - CI/CD pushes new scripts to `scripts/api-deployment/`
    - Always serves the newest `.sh` file automatically
 
-## 🏗️ CI/CD Integration
+## CI/CD Integration
 
 ### GitHub Actions Example
 
@@ -153,14 +153,11 @@ jobs:
 
 ```bash
 #!/bin/bash
-# CI script to push new deployment script
-
 APP_NAME="my-api"
 VERSION="$1"
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 SCRIPT_NAME="deploy-${VERSION}-${TIMESTAMP}.sh"
 
-# Generate the script
 cat > "$SCRIPT_NAME" << EOF
 #!/bin/bash
 echo "Deploying $APP_NAME version $VERSION"
@@ -168,20 +165,19 @@ docker pull myregistry/$APP_NAME:$VERSION
 docker service update --image myregistry/$APP_NAME:$VERSION $APP_NAME
 EOF
 
-# Upload to script server
 scp "$SCRIPT_NAME" deploy@script-server:/opt/script-server/scripts/$APP_NAME/
 
 # Now users can run:
 # curl -fsSL https://script-server.com/my-api | bash
 ```
 
-## 🏢 Production Deployment
+## Production Deployment
 
-### Basic Production Setup
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full details.
 
 ```bash
 # 1. Clone on your server
-git clone https://github.com/yourusername/simple-script-distribution-ts.git
+git clone https://github.com/4ngel2769/simple-script-distribution-ts.git
 cd simple-script-distribution-ts
 
 # 2. Configure environment
@@ -203,41 +199,18 @@ npm run hash-password "your-secure-password"
 docker compose up -d
 ```
 
-### With Reverse Proxy (Nginx)
-
-```nginx
-server {
-    listen 443 ssl http2;
-    server_name scripts.yourdomain.com;
-    
-    ssl_certificate /path/to/cert.pem;
-    ssl_certificate_key /path/to/key.pem;
-    
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-```
-
-## 📊 Monitoring
+## Monitoring
 
 ### Health Check
 
 ```bash
 # Basic health check
 curl https://your-domain.com/api/health
-
-# Detailed monitoring
-curl -w "@curl-format.txt" -o /dev/null -s https://your-domain.com/api/health
 ```
 
 ### Usage Analytics
 
-Monitor script access in your reverse proxy logs:
+Monitor script access in your reverse proxy logs.
 
 ```bash
 # Most accessed scripts
@@ -247,7 +220,7 @@ tail -f /var/log/nginx/access.log | grep -E "GET /[^/\s]+ HTTP" | grep -v "/api/
 awk '$7 ~ /^\/[^\/]+$/ && $7 !~ /^\/(api|admin|login)/ {print $7}' access.log | sort | uniq -c | sort -nr
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 simple-script-distribution-ts/
@@ -275,7 +248,7 @@ simple-script-distribution-ts/
     └── hash-password.js        # Password hash generator
 ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our contributing guidelines:
 
@@ -290,39 +263,31 @@ We welcome contributions! Please see our contributing guidelines:
 
 ```bash
 # Clone and setup
-git clone https://github.com/yourusername/simple-script-distribution-ts.git
+git clone https://github.com/4ngel2769/simple-script-distribution-ts.git
 cd simple-script-distribution-ts
 npm install
-
-# Run in development mode
 npm run dev
-
-# Run tests (when available)
-npm test
-
-# Build for production
-npm run build
 ```
 
-## 📖 Documentation
+## Documentation
 
 - **[Setup Guide](docs/SETUP.md)** - Installation and configuration
 - **[Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment
 - **[API Documentation](docs/API.md)** - REST API reference
 
-## 🔧 Technology Stack
+## Technology Stack
 
-- **Framework**: Next.js 15 with TypeScript
-- **Authentication**: NextAuth.js
-- **Styling**: Tailwind CSS
-- **Code Editor**: Monaco Editor (VS Code editor)
-- **File System**: fs-extra for file operations
-- **Security**: bcrypt for password hashing
-- **HTTP Client**: Axios for API calls
-- **Notifications**: React Hot Toast
-- **Runtime**: Node.js 20+
+- Framework: Next.js 15 with TypeScript
+- Authentication: NextAuth.js
+- Styling: Tailwind CSS
+- Code Editor: VSCode
+- File System: fs-extra
+- Security: bcrypt
+- HTTP Client: Axios
+- Notifications: React Hot Toast
+- Runtime: Node.js 20+
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -346,28 +311,17 @@ npm run build
 - Verify volume mounts for `data` and `scripts` directories
 - Review environment variables in `.env`
 
-### Debug Mode
-
-```bash
-# Enable debug logging
-DEBUG=* npm run dev
-
-# For Docker
-docker compose -f docker-compose.yml -f docker-compose.debug.yml up
-```
-
-## 📜 License
+## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- **Next.js team** for the excellent framework
-- **Vercel** for hosting and deployment tools
+- **Next.js team**
 - **Open source community** for the amazing packages that make this possible
 
 ---
 
-**Made with ❤️ for the DevOps and System Administration community**
+Made with 💚 & NextJS for the DevOps and System Administration community.
 
-*Simplifying script distribution, one curl command at a time.*
+Simplifying script distribution, one curl command at a time.
