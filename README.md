@@ -1,4 +1,5 @@
 <div align="center">
+    <img src=".img/script_hosting.png" alt="Script Distribution Server">
     <h1>
         Simple Script Distribution Server  
     </h1>
