@@ -11,7 +11,7 @@ This guide covers the initial setup of the Script Distribution Server with suppo
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/simple-script-distribution-ts.git
+   git clone https://github.com/4ngel2769/simple-script-distribution-ts.git
    cd simple-script-distribution-ts
    ```
 
@@ -31,7 +31,7 @@ This guide covers the initial setup of the Script Distribution Server with suppo
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/simple-script-distribution-ts.git
+   git clone https://github.com/4ngel2769/simple-script-distribution-ts.git
    cd simple-script-distribution-ts
    ```
 
