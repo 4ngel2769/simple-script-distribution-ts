@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Script Distribution Server
+
+A modern application for distributing and managing shell scripts with an admin dashboard.
+
+## Overview
+
+Script Distribution Server is a Next.js application designed to help system administrators and DevOps teams distribute shell scripts to users and systems. It provides:
+
+- A public page where users can access scripts
+- An admin dashboard for managing scripts
+- Support for both local scripts and redirects to external script URLs
+- Script content editor with syntax highlighting
+- Simple authentication for administrative access
+
+## Features
+
+- 🚀 **Simple Script Distribution** - Easy access to scripts via clean URLs
+- 🔒 **Secure Admin Panel** - Password-protected admin dashboard
+- 📝 **Script Content Management** - Built-in editor for script content
+- 🔄 **Redirect Support** - Option to redirect to external script URLs
+- 🐳 **Docker Support** - Easy deployment via Docker or Docker Compose
+- 💻 **Local Development** - Full support for local development
 
 ## Getting Started
 
-First, run the development server:
+See the [Setup Guide](docs/SETUP.md) for installation instructions.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Documentation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [Setup Guide](docs/SETUP.md) - Installation and initial setup
+- [Deployment Guide](docs/DEPLOYMENT.md) - Production deployment instructions
+- [API Documentation](docs/API.md) - REST API endpoints reference
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Development
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerequisites
 
-## Learn More
+- Node.js 18+ and npm
 
-To learn more about Next.js, take a look at the following resources:
+### Local Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/script-distribution.git
+   cd script-distribution
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+3. Create environment file:
+   ```bash
+   cp example.env.local .env.local
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Start development server:
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Access the app at http://localhost:3000
+
+### Default Login
+
+- Username: `admin`
+- Password: `admin123`
+
+## License
+
+MIT
