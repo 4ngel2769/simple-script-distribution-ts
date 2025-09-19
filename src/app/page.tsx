@@ -66,10 +66,10 @@ export default function HomePage() {
                 <div
                   key={script.name}
                   className="p-4 bg-gray-800 border border-gray-700 rounded-lg cursor-pointer transition hover:border-blue-500 hover:translate-x-1"
-                  onClick={() => copyToClipboard(`curl -fsSL ${domain}/api/raw/${script.name} | sudo bash`)}
+                  onClick={() => copyToClipboard(`curl -fsSL ${domain}/${script.name} | sudo bash`)}
                 >
                   <span className="mr-2">{script.icon || '📜'}</span>
-                  <span className="text-green-400">/api/raw/{script.name}</span> - {script.description}
+                  <span className="text-green-400">/{script.name}</span> - {script.description}
                 </div>
               ))}
             </div>
@@ -82,25 +82,25 @@ export default function HomePage() {
               <p className="mb-1">Direct download:</p>
               <pre 
                 className="bg-gray-900 p-2 rounded cursor-pointer mb-4"
-                onClick={() => copyToClipboard(`curl ${domain}/api/raw/script-name`)}
+                onClick={() => copyToClipboard(`curl ${domain}/script-name`)}
               >
-                curl {domain}/api/raw/script-name
+                curl {domain}/script-name
               </pre>
               
               <p className="mb-1">Download and execute:</p>
               <pre 
                 className="bg-gray-900 p-2 rounded cursor-pointer mb-4"
-                onClick={() => copyToClipboard(`curl -fsSL ${domain}/api/raw/script-name | sudo bash`)}
+                onClick={() => copyToClipboard(`curl -fsSL ${domain}/script-name | sudo bash`)}
               >
-                curl -fsSL {domain}/api/raw/script-name | sudo bash
+                curl -fsSL {domain}/script-name | sudo bash
               </pre>
               
               <p className="mb-1">Save to file:</p>
               <pre 
                 className="bg-gray-900 p-2 rounded cursor-pointer"
-                onClick={() => copyToClipboard(`curl -o install.sh ${domain}/api/raw/script-name`)}
+                onClick={() => copyToClipboard(`curl -o install.sh ${domain}/script-name`)}
               >
-                curl -o install.sh {domain}/api/raw/script-name
+                curl -o install.sh {domain}/script-name
               </pre>
             </div>
             

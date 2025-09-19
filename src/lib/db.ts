@@ -5,6 +5,18 @@ import { Config, DEFAULT_CONFIG, ScriptConfig } from './config';
 const CONFIG_PATH = process.env.CONFIG_PATH || path.join(process.cwd(), 'data/config.json');
 const SCRIPTS_DIR = process.env.SCRIPTS_DIR || path.join(process.cwd(), 'scripts');
 
+// Reserved names that scripts cannot use
+const RESERVED_NAMES = [
+  'admin',
+  'login', 
+  'api',
+  'health',
+  '_next',
+  'favicon.ico',
+  'robots.txt',
+  'sitemap.xml'
+];
+
 // Ensure directories exist
 fs.ensureDirSync(path.dirname(CONFIG_PATH));
 fs.ensureDirSync(SCRIPTS_DIR);
@@ -30,6 +42,24 @@ export async function saveConfig(config: Config): Promise<void> {
   await fs.writeJson(CONFIG_PATH, config, { spaces: 2 });
 }
 
+// Validate script name
+export function validateScriptName(name: string): void {
+  const normalizedName = name.toLowerCase().trim();
+  
+  if (RESERVED_NAMES.includes(normalizedName)) {
+    throw new Error(`Script name "${name}" is reserved and cannot be used`);
+  }
+  
+  // Additional validation rules
+  if (!/^[a-z0-9_-]+$/.test(normalizedName)) {
+    throw new Error('Script name can only contain lowercase letters, numbers, hyphens, and underscores');
+  }
+  
+  if (normalizedName.length < 2 || normalizedName.length > 50) {
+    throw new Error('Script name must be between 2 and 50 characters');
+  }
+}
+
 // SCRIPT OPERATIONS
 
 // Get all scripts
@@ -48,6 +78,9 @@ export async function getScriptByName(name: string): Promise<ScriptConfig | null
 export async function createScript(script: Omit<ScriptConfig, 'createdAt' | 'updatedAt'>): Promise<ScriptConfig> {
   const config = await getConfig();
   
+  // Validate script name
+  validateScriptName(script.name);
+  
   // Check if script already exists
   if (config.scripts.some(s => s.name === script.name)) {
     throw new Error(`Script "${script.name}" already exists`);
@@ -61,7 +94,7 @@ export async function createScript(script: Omit<ScriptConfig, 'createdAt' | 'upd
   };
   
   // Handle local script creation
-  if (script.type === 'local') {
+  if (script.type === 'local' && script.mode !== 'unmanaged') {
     const scriptDir = path.join(SCRIPTS_DIR, script.name);
     fs.ensureDirSync(scriptDir);
     

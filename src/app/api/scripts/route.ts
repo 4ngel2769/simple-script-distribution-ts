@@ -45,9 +45,11 @@ export async function POST(request: NextRequest) {
     // Sanitize script name
     scriptData.name = scriptData.name
       .toLowerCase()
-      .replace(/\s+/g, "_")
-      .replace(/-/g, "_")
-      .replace(/\./g, "_");
+      .trim()
+      .replace(/\s+/g, "-")           // Replace spaces with hyphens
+      .replace(/[^a-z0-9_-]/g, "")    // Remove any characters that aren't letters, numbers, underscores, or hyphens
+      .replace(/-+/g, "-")            // Replace multiple consecutive hyphens with single hyphen
+      .replace(/^-+|-+$/g, "");       // Remove leading/trailing hyphens
       
     const newScript = await createScript(scriptData);
     return NextResponse.json(newScript, { status: 201 });

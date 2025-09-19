@@ -9,7 +9,44 @@ Most API endpoints require authentication using NextAuth.js session cookies. To 
 1. Login through the `/login` page
 2. API requests will use the session cookie automatically
 
-## Scripts Management
+## Script Access (Public)
+
+### Get Raw Script Content
+
+```http
+GET /{script-name}
+```
+
+**Description:** Serves raw script content directly at the root level for easy curl access.
+
+**Examples:**
+```bash
+curl http://localhost:3000/docker-install
+curl -fsSL http://localhost:3000/pi | sudo bash
+```
+
+**Response:**
+- For local scripts: Raw script content with `Content-Type: text/plain`
+- For redirect scripts: HTTP 302 redirect to the target URL
+
+**Error Response:**
+```json
+{
+  "error": "Script not found"
+}
+```
+
+**Note:** Reserved names (`admin`, `login`, `api`, `health`, etc.) cannot be used as script names.
+
+### Legacy Raw Script Access
+
+```http
+GET /api/raw/{name}
+```
+
+**Description:** Legacy endpoint for raw script access (still supported).
+
+## Scripts Management (Admin)
 
 ### Get All Scripts
 
@@ -25,9 +62,20 @@ GET /api/scripts
     "description": "Install Docker CE",
     "icon": "🐳",
     "type": "local",
-    "scriptPath": "/app/scripts/docker-install/docker-install.sh",
-    "createdAt": "2023-11-15T12:00:00.000Z",
-    "updatedAt": "2023-11-15T12:00:00.000Z"
+    "mode": "managed",
+    "scriptPath": "scripts/docker-install/docker-install.sh",
+    "createdAt": "2025-09-19T12:00:00.000Z",
+    "updatedAt": "2025-09-19T12:00:00.000Z"
+  },
+  {
+    "name": "tor",
+    "description": "Tor installer (auto-updated)",
+    "icon": "🕸️",
+    "type": "local",
+    "mode": "unmanaged",
+    "folderPath": "tor",
+    "createdAt": "2025-09-19T12:30:00.000Z",
+    "updatedAt": "2025-09-19T12:30:00.000Z"
   },
   {
     "name": "github-runner",
@@ -35,8 +83,8 @@ GET /api/scripts
     "icon": "🏃",
     "type": "redirect",
     "redirectUrl": "https://example.com/github-runner.sh",
-    "createdAt": "2023-11-15T12:30:00.000Z",
-    "updatedAt": "2023-11-15T12:30:00.000Z"
+    "createdAt": "2025-09-19T12:45:00.000Z",
+    "updatedAt": "2025-09-19T12:45:00.000Z"
   }
 ]
 ```
@@ -48,12 +96,18 @@ POST /api/scripts
 Content-Type: application/json
 
 {
-  "name": "docker-install",
+  "name": "docker install",
   "description": "Install Docker CE",
   "icon": "🐳",
-  "type": "local"
+  "type": "local",
+  "mode": "managed"
 }
 ```
+
+**Script Types:**
+- **local + managed**: Script content managed via web UI
+- **local + unmanaged**: Script content from newest .sh file in specified folder
+- **redirect**: Redirects to external URL
 
 **Response:**
 ```json
@@ -62,11 +116,14 @@ Content-Type: application/json
   "description": "Install Docker CE",
   "icon": "🐳",
   "type": "local",
-  "scriptPath": "/app/scripts/docker-install/docker-install.sh",
-  "createdAt": "2023-11-15T12:00:00.000Z",
-  "updatedAt": "2023-11-15T12:00:00.000Z"
+  "mode": "managed",
+  "scriptPath": "scripts/docker-install/docker-install.sh",
+  "createdAt": "2025-09-19T12:00:00.000Z",
+  "updatedAt": "2025-09-19T12:00:00.000Z"
 }
 ```
+
+**Note:** Script names are automatically sanitized (spaces become hyphens, special characters removed).
 
 ### Get Script
 
@@ -81,9 +138,10 @@ GET /api/scripts/{name}
   "description": "Install Docker CE",
   "icon": "🐳",
   "type": "local",
-  "scriptPath": "/app/scripts/docker-install/docker-install.sh",
-  "createdAt": "2023-11-15T12:00:00.000Z",
-  "updatedAt": "2023-11-15T12:00:00.000Z"
+  "mode": "managed",
+  "scriptPath": "scripts/docker-install/docker-install.sh",
+  "createdAt": "2025-09-19T12:00:00.000Z",
+  "updatedAt": "2025-09-19T12:00:00.000Z"
 }
 ```
 
@@ -106,9 +164,10 @@ Content-Type: application/json
   "description": "Updated description",
   "icon": "📦",
   "type": "local",
-  "scriptPath": "/app/scripts/docker-install/docker-install.sh",
-  "createdAt": "2023-11-15T12:00:00.000Z",
-  "updatedAt": "2023-11-15T14:30:00.000Z"
+  "mode": "managed",
+  "scriptPath": "scripts/docker-install/docker-install.sh",
+  "createdAt": "2025-09-19T12:00:00.000Z",
+  "updatedAt": "2025-09-19T14:30:00.000Z"
 }
 ```
 
@@ -140,7 +199,9 @@ GET /api/scripts/{name}/content
 }
 ```
 
-### Update Script Content
+**Note:** For unmanaged scripts, this returns the content of the newest .sh file in the specified folder.
+
+### Update Script Content (Managed Scripts Only)
 
 ```http
 PUT /api/scripts/{name}/content
@@ -158,22 +219,36 @@ Content-Type: application/json
 }
 ```
 
-## Raw Script Access
+**Note:** This endpoint only works for managed local scripts. Unmanaged scripts return an error as their content is managed through the file system.
 
-### Get Raw Script
+## Folder Management
+
+### List Folders
 
 ```http
-GET /api/raw/{name}
+GET /api/scripts/folders?path=subfolder
 ```
+
+**Description:** Lists directories in the scripts folder for unmanaged script setup.
+
+**Query Parameters:**
+- `path` (optional): Relative path within scripts directory
 
 **Response:**
+```json
+[
+  {
+    "name": "tor",
+    "isDirectory": true,
+    "path": "tor"
+  },
+  {
+    "name": "docker",
+    "isDirectory": true,
+    "path": "docker"
+  }
+]
 ```
-#!/bin/bash
-
-echo "Hello World"
-```
-
-This endpoint returns the raw script content with Content-Type: text/plain or redirects to an external URL if the script type is "redirect".
 
 ## Health Check
 
@@ -185,8 +260,8 @@ GET /api/health
 ```json
 {
   "status": "ok",
-  "version": "1.0.0",
-  "timestamp": "2023-11-15T12:00:00.000Z"
+  "version": "0.1.1",
+  "timestamp": "2025-09-19T12:00:00.000Z"
 }
 ```
 
@@ -196,7 +271,7 @@ The API returns appropriate HTTP status codes:
 
 - `200` - Success
 - `201` - Resource created successfully
-- `400` - Bad request (invalid parameters)
+- `400` - Bad request (invalid parameters, reserved name, etc.)
 - `401` - Unauthorized (authentication required)
 - `404` - Resource not found
 - `500` - Server error
@@ -208,3 +283,25 @@ Error responses include a JSON body with an error message:
   "error": "Detailed error message"
 }
 ```
+
+## Reserved Script Names
+
+The following names are reserved and cannot be used for scripts:
+- `admin`
+- `login`
+- `api`
+- `health`
+- `_next`
+- `favicon.ico`
+- `robots.txt`
+- `sitemap.xml`
+
+## Script Name Validation
+
+Script names must:
+- Be 2-50 characters long
+- Contain only lowercase letters, numbers, hyphens, and underscores
+- Not be a reserved name
+- Be unique
+
+Names are automatically sanitized during creation (spaces become hyphens, invalid characters removed).
